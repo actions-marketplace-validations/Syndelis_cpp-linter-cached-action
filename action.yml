@@ -101,12 +101,29 @@ runs:
           python3 -m venv '${{ github.action_path }}/venv'
           source '${{ github.action_path }}/venv/bin/activate'
         fi
-        python3 -m pip install -r '${{ github.action_path }}/requirements.txt'
-        clang-tools -i ${{ inputs.version }} -b
+
+    - name: Get pip cache directory
+      id: pip-cache-dir
+      run: echo "dir=$(python3 -m pip cache dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache pip
+      id: pip-cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.pip-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install cpp-linter
+      if: steps.pip-cache.outputs.cache-hit != 'true'
+      run: python3 -m pip install -r '${{ github.action_path }}/requirements.txt'
+
     - name: Run cpp-linter
       id: cpp-linter
       shell: bash
       run: |
+        clang-tools -i ${{ inputs.version }} -b
         if [[ "${{runner.os}}"  == "macOS" ]];then
           source '${{ github.action_path }}/venv/bin/activate'
         fi
