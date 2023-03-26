@@ -5,6 +5,10 @@ branding:
   icon: "check-circle"
   color: "green"
 inputs:
+  skip-installation-phase:
+    description: Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
+    required: false
+    default: false
   thread-comments:
     description: Set this option to false to disable the use of thread comments as feedback. Defaults to false.
     required: false
@@ -87,6 +91,7 @@ runs:
   steps:
     - name: Install action dependencies
       shell: bash
+      if: inputs.skip-installation-phase == 'false'
       run: |
         if [[ "${{runner.os}}"  == "Linux" ]]; then
           sudo apt-get update

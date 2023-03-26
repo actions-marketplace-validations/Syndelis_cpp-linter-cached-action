@@ -55,6 +55,12 @@ jobs:
 
 ### Optional Inputs
 
+#### `skip-installation-phase`
+
+- **Description**: Whether this action should install its dependencies or not.
+  - Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
+- Default: false.
+
 #### `style`
 
 - **Description**: The style rules to use.
