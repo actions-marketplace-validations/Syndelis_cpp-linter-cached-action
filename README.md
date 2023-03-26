@@ -61,6 +61,8 @@ jobs:
   - Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
 - Default: false.
 
+Observation: check [Cache APT Packages](https://github.com/marketplace/actions/cache-apt-packages) if you want to cache the Ubuntu system dependencies.
+
 #### `style`
 
 - **Description**: The style rules to use.

@@ -1,9 +1,9 @@
-name: C/C++ Linter
-description: Lint C/C++ code with clang-format and clang-tidy then post annotations and comments with faulty results.
+name: C/C++ Linter - Cacheable
+description: Fork of "C/C++ Linter" which caches pip and allows for caching of system dependencies.
 author: shenxianpeng
 branding:
   icon: "check-circle"
-  color: "green"
+  color: "blue"
 inputs:
   skip-installation-phase:
     description: Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
