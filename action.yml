@@ -89,14 +89,13 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Install action dependencies
-      shell: bash
+    - name: Install Clang Toolkit
       if: inputs.skip-installation-phase == 'false'
-      run: |
-        if [[ "${{runner.os}}"  == "Linux" ]]; then
-          sudo apt-get update
-          sudo apt-get install clang-format-${{ inputs.version }} clang-tidy-${{ inputs.version }} || true
-        fi
+      uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: clang-format-${{ inputs.version }} clang-tidy-${{ inputs.version }} clang-tools-${{ inputs.version }}
+        version: 1.0
+        execute_install_scripts: true
 
     - name: Setup Python
       id: setup_python
