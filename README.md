@@ -1,31 +1,32 @@
 <!--intro-start-->
 
-# C/C++ Linter Action <sub><sup>| clang-format & clang-tidy</sup></sub>
+# C/C++ Linter Action ­— Cached <sub><sup>| clang-format & clang-tidy</sup></sub>
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cpp-linter/cpp-linter-action)
-[![GitHub marketplace](https://img.shields.io/badge/marketplace-C%2FC%2B%2B%20Linter-blue?logo=github)](https://github.com/marketplace/actions/c-c-linter)
-[![cpp-linter](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml)
-[![MkDocs Deploy](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/mkdocs-deploy.yml/badge.svg)](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/mkdocs-deploy.yml)
-![GitHub](https://img.shields.io/github/license/cpp-linter/cpp-linter-action?label=license&logo=github)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Syndelis/cpp-linter-cached-action)
+<!-- [![GitHub marketplace](https://img.shields.io/badge/marketplace-C%2FC%2B%2B%20Linter-blue?logo=github)](https://github.com/marketplace/actions/c-c-linter) -->
+<!-- [![cpp-linter](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml) -->
+![GitHub](https://img.shields.io/github/license/Syndelis/cpp-linter-cached-action?label=license&logo=github)
 
-A Github Action for linting C/C++ code integrating clang-tidy and clang-format to collect feedback provided in the form of thread comments and/or annotations.
+## About this Fork
 
-## What's New
+This is a fork of [C/C++ Linter Action](https://github.com/cpp-linter/cpp-linter-action) that caches both System and Python dependencies **by default**. It is a **drop-in replacement**, requiring absolutely no changes for end users to take advantage from the caching steps.
 
-v2
+Aside from that, the only other modification is the addition of the `skip-installation-phase` optional input, which gives users the freedom of installing the toolkits as they wish. **Note that this does not disable installing the Python dependencies**.
 
-* Change action from using docker to composite steps
-  * improve workflow runs times from 1m 24s (currently) to 6-20s.
-  * better support for the database input option (which is currently broken with the docker env).
-  * better support cross-compilation
-  * better support 3rd party libraries
-* Includes many issues and enhancements. See [#87](https://github.com/cpp-linter/cpp-linter-action/issues/87) for details.
+## How it Caches
 
-Refer [here](https://github.com/cpp-linter/cpp-linter-action/tree/v1) for previous versions.
+- Caching System Dependencies:
+  - For this purpose I'm using the amazing [Cache APT Packages Action](https://github.com/marketplace/actions/cache-apt-packages);
+
+
+- Caching Python Dependencies:
+  - Python and Pip setup: [Setup Python Action](https://github.com/actions/setup-python/);
+
+  - Pip pacakge [requirements](./requirements.txt): [Cache Action](https://github.com/actions/cache/) with keys generated from [File Hash for Cache Action](https://github.com/KEINOS/gh-action-hash-for-cache);
 
 ## Usage
 
-Create a new GitHub Actions workflow in your project, e.g. at [.github/workflows/cpp-linter.yml](https://github.com/cpp-linter/cpp-linter-action/blob/main/.github/workflows/cpp-linter.yml)
+Create a new GitHub Actions workflow in your project, e.g. at [.github/workflows/cpp-linter.yml](.github/workflows/cpp-linter.yml)
 
 The content of the file should be in the following format.
 
@@ -38,8 +39,11 @@ jobs:
   cpp-linter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cpp-linter/cpp-linter-action@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Run C/C++ Linter
+        uses: Syndelis/cpp-linter-cached-action@v2
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,11 +61,10 @@ jobs:
 
 #### `skip-installation-phase`
 
-- **Description**: Whether this action should install its dependencies or not.
+- **Description**: Whether this action should install its system dependencies or not.
   - Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
 - Default: false.
-
-Observation: check [Cache APT Packages](https://github.com/marketplace/actions/cache-apt-packages) if you want to cache the Ubuntu system dependencies.
+- Observation: When `false`, the action will install the dependencies using caches, so as to not install the same dependencies on every run.
 
 #### `style`
 
@@ -163,13 +166,13 @@ This action creates 1 output variable named `checks-failed`. Even if the linting
 
 ### Annotations
 
-![clang-format annotations](https://raw.githubusercontent.com/cpp-linter/cpp-linter-action/main/docs/images/annotations-clang-format.png)
+![clang-format annotations](./docs/images/annotations-clang-format.png)
 
-![clang-tidy annotations](https://raw.githubusercontent.com/cpp-linter/cpp-linter-action/main/docs/images/annotations-clang-tidy.png)
+![clang-tidy annotations](./docs/images/annotations-clang-tidy.png)
 
 ### Thread Comment
 
-![sample comment](https://raw.githubusercontent.com/cpp-linter/cpp-linter-action/main/docs/images/comment.png)
+![sample comment](./docs/images/comment.png)
 
 <!--footer-start-->
 
@@ -180,17 +183,17 @@ You can show C/C++ Linter Action status with a badge in your repository README
 Example
 
 ```markdown
-[![cpp-linter](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml)
+[![cpp-linter](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml)
 ```
 
-[![cpp-linter](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/cpp-linter/cpp-linter-action/actions/workflows/cpp-linter.yml)
+[![cpp-linter](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml/badge.svg)](https://github.com/Syndelis/cpp-linter-cached-action/actions/workflows/cpp-linter.yml)
 
 ## Have question or feedback?
 
-To provide feedback (requesting a feature or reporting a bug) please post to [issues](https://github.com/cpp-linter/cpp-linter-action/issues).
+To provide feedback (requesting a feature or reporting a bug) please post to [issues](https://github.com/Syndelis/cpp-linter-cached-action/issues).
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](https://github.com/cpp-linter/cpp-linter-action/blob/main/LICENSE)
+The scripts and documentation in this project are released under the [MIT License](./LICENSE)
 
 <!--footer-end-->

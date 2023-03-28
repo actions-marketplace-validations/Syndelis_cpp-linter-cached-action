@@ -1,12 +1,12 @@
-name: C/C++ Linter - Cacheable
-description: Fork of "C/C++ Linter" which caches pip and allows for caching of system dependencies.
-author: shenxianpeng
+name: C/C++ Linter - Cached
+description: Fork of "C/C++ Linter" with Pip and System Dependencies Cache
+author: Syndelis
 branding:
-  icon: "check-circle"
-  color: "blue"
+  icon: "archive"
+  color: "green"
 inputs:
   skip-installation-phase:
-    description: Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache.
+    description: Set this option to true to skip installing dependencies. This allows you to use other actions for that purpose, so that you can take advantage of GitHub Actions Cache. If not used, this action will try to cache the system dependencies.
     required: false
     default: false
   thread-comments:
