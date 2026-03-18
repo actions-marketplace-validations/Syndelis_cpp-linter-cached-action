@@ -99,7 +99,7 @@ runs:
 
     - name: Setup Python
       id: setup_python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         cache: 'pip'
         cache-dependency-path: '${{ github.action_path }}/requirements.txt'
