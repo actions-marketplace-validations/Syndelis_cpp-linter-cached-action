@@ -119,7 +119,7 @@ runs:
 
     - name: Install Pip Dependencies - Try Cache
       id: pip_install_cache
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       with:
         path: ${{ github.action_path }}/venv
         key: ${{ runner.os }}-pip-${{ steps.requirements_hash.outputs.hash }}
@@ -134,7 +134,7 @@ runs:
     - name: Install Pip Dependencies - Save Cache
       id: pip_install_save_cache
       if: steps.pip_install_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       with:
         path: ${{ github.action_path }}/venv
         key: ${{ runner.os }}-pip-${{ steps.requirements_hash.outputs.hash }}
